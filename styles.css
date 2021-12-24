@@ -1,0 +1,25 @@
+:root {
+  --primary: #161616;
+  --secondary: #fff;
+}
+
+body {
+  background-color: var(--primary);
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.game-container {
+  margin: 0 auto;
+  position: relative;
+  width: 352px;
+  height: 198px;
+  outline: 1px solid var(--secondary);
+  transform: scale(2.5) translateY(50%);
+}
+
+.game-container canvas {
+  /* Removes the blurriness of the image */
+  image-rendering: pixelated;
+}
