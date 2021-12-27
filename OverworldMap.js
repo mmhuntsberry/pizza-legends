@@ -10,6 +10,8 @@ class OverworldMap {
 
     this.upperImage = new Image();
     this.upperImage.src = config.upperSrc;
+
+    this.isCutscenePlaying = true;
   }
 
   drawLowerImage(ctx, cameraPerson) {
@@ -34,10 +36,32 @@ class OverworldMap {
   }
 
   mountObjects() {
-    Object.values(this.gameObjects).forEach((o) => {
-      // TODO:  Determin if this object actually mount
-      o.mount(this);
-    });
+    Object.keys(this.gameObjects)
+      .sort((a, b) => {
+        return a.y - b.y;
+      })
+      .forEach((key) => {
+        // TODO:  Determine if this object actually mount
+        let object = this.gameObjects[key];
+        object.id = key;
+        object.mount(this);
+      });
+  }
+
+  async startCutscene(events) {
+    this.isCutscenePlaying = true;
+
+    // Start a loop of async events
+    // await each one
+    for (let i = 0; i < events.length; i++) {
+      const eventHandler = new OverworldEvent({
+        event: events[i],
+        map: this,
+      });
+      await eventHandler.init();
+    }
+
+    this.isCutscenePlaying = false;
   }
 
   addWall(x, y) {
@@ -60,15 +84,35 @@ window.OverworldMaps = {
     lowerSrc: "/images/maps/DemoLower.png",
     upperSrc: "/images/maps/DemoUpper.png",
     gameObjects: {
-      hero: new Person({
-        x: utils.withGrid(5),
-        y: utils.withGrid(4),
-        isPlayerControlled: true,
-      }),
       npc1: new Person({
         x: utils.withGrid(7),
         y: utils.withGrid(8),
         src: "/images/characters/people/npc1.png",
+        behaviorLoop: [
+          { type: "stand", direction: "up", time: 300 },
+          { type: "stand", direction: "left", time: 800 },
+          { type: "stand", direction: "up", time: 1200 },
+          { type: "stand", direction: "right", time: 800 },
+        ],
+      }),
+      npc2: new Person({
+        x: utils.withGrid(5),
+        y: utils.withGrid(6),
+        src: "/images/characters/people/npc2.png",
+        behaviorLoop: [
+          { type: "walk", direction: "left" },
+          { type: "walk", direction: "left" },
+          { type: "stand", direction: "left", time: 800 },
+          { type: "walk", direction: "up" },
+          { type: "walk", direction: "right" },
+          { type: "walk", direction: "right" },
+          { type: "walk", direction: "down" },
+        ],
+      }),
+      hero: new Person({
+        x: utils.withGrid(5),
+        y: utils.withGrid(4),
+        isPlayerControlled: true,
       }),
     },
     walls: {
