@@ -40,23 +40,50 @@ class Overworld {
     step();
   }
 
-  init() {
-    console.log("Hello from the overworld", this);
-    this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
+  bindActionInput() {
+    new KeyPressListener("Enter", () => {
+      // IS there a person here to talk to?
+      this.map.checkForActionCutscene();
+    });
+  }
+
+  bindHeroPositionCheck() {
+    document.addEventListener("PersonWalkingComplete", (e) => {
+      if (e.detail.whoId === "hero") {
+        // Hero's position has changed
+        this.map.checkForFootstepCutscene();
+      }
+    });
+  }
+
+  startMap(mapConfig) {
+    // console.log("Hello from the overworld", this);
+    this.map = new OverworldMap(mapConfig);
+    this.map.overworld = this;
     this.map.mountObjects();
+  }
+
+  init() {
+    // console.log("Hello from the overworld", this);
+    this.startMap(window.OverworldMaps.DemoRoom);
+
+    this.bindActionInput();
+    this.bindHeroPositionCheck();
+
     this.directionInput = new DirectionInput();
     this.directionInput.init();
 
     this.startGameLoop();
-    this.map.startCutscene([
-      { who: "npc2", type: "walk", direction: "left" },
-      { who: "npc2", type: "stand", direction: "down" },
-      { who: "hero", type: "walk", direction: "down" },
-      { who: "hero", type: "walk", direction: "down" },
-      { who: "hero", type: "walk", direction: "down" },
-      { who: "npc1", type: "walk", direction: "left" },
-      { who: "npc1", type: "walk", direction: "left" },
-      { who: "npc1", type: "stand", direction: "up", time: 800 },
-    ]);
+    // this.map.startCutscene([
+    //   { who: "npc2", type: "walk", direction: "left" },
+    //   { who: "npc2", type: "stand", direction: "down" },
+    //   { who: "hero", type: "walk", direction: "down" },
+    //   { who: "hero", type: "walk", direction: "down" },
+    //   { who: "hero", type: "walk", direction: "down" },
+    //   { who: "npc1", type: "walk", direction: "left" },
+    //   { who: "npc1", type: "walk", direction: "left" },
+    //   { who: "npc1", type: "stand", direction: "up", time: 100 },
+    //   { type: "textMessage", text: "Hey!  What are you doing?!?" },
+    // ]);
   }
 }
