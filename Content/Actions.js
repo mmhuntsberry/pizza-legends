@@ -1,6 +1,7 @@
 window.Actions = {
   damage1: {
     name: "Whomp",
+    description: "Attack your opponent",
     success: [
       { type: "textMessage", text: "{CASTER} uses {ACTION}!" },
       { type: "animation", animation: "spin" },
@@ -17,6 +18,7 @@ window.Actions = {
   },
   clumsyStatus: {
     name: "Olive Oil",
+    description: "Make your opponent clumsy",
     success: [
       { type: "textMessage", text: "{CASTER} uses {ACTION}!" },
       { type: "animation", animation: "glob", color: "#dafd2a" },

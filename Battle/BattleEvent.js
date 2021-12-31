@@ -45,6 +45,15 @@ class BattleEvent {
     }
 
     if (status) {
+      who.update({
+        status: { ...status },
+      });
+    }
+
+    if (status === null) {
+      who.update({
+        status: null,
+      });
     }
 
     // Wait a little bit
@@ -75,7 +84,6 @@ class BattleEvent {
   }
 
   init(resolve) {
-    console.log(this);
     this[this.event.type](resolve);
   }
 }

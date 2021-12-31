@@ -51,6 +51,24 @@
   animation: battle-spin-right 0.8s;
 }
 
+.glob-orb {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+}
+
+.battle-glob-right {
+  left: 70px;
+  top: 104px;
+  animation: battle-glob-right 1s forwards;
+}
+
+.battle-glob-left {
+  left: 227px;
+  top: 56px;
+  animation: battle-glob-left 1s forwards;
+}
+
 @keyframes battle-damage-blink {
   to {
     visibility: hidden;
@@ -82,5 +100,49 @@
 
   100% {
     transform: translate3d(0, 0, 0) scale(2);
+  }
+}
+
+@keyframes battle-glob-right {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.5);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translate3d(10px, -80px, 0) scale(1);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translate3d(149px, -47px, 0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate3d(149px, -47px, 0) scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes battle-glob-left {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.5);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translate3d(-10px, -50px, 0) scale(1);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translate3d(-174px, 47px, 0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate3d(-174px, 47px, 0) scale(3);
+    opacity: 0;
   }
 }

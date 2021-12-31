@@ -106,7 +106,8 @@
 .Combatant__status {
   position: absolute;
   font-size: 5px;
-  left: 47px;
+  left: 51px;
+  width: 15px;
   bottom: -3px;
   padding-left: 2px;
   padding-right: 2px;
