@@ -59,6 +59,9 @@ class BattleEvent {
     // Wait a little bit
     await utils.wait(600);
 
+    this.battle.playerTeam.update();
+    this.battle.enemyTeam.update();
+
     // Stop blinking
     target.pizzaElement.classList.remove("battle-damage-blink");
 
@@ -70,17 +73,56 @@ class BattleEvent {
     fn(this.event, resolve);
   }
 
+  async replace(resolve) {
+    const { replacement } = this.event;
+
+    // Clear out the old combatant
+    const prevCombatant =
+      this.battle.combatants[this.battle.activeCombatants[replacement.team]];
+    this.battle.activeCombatants[replacement.team] = null;
+
+    prevCombatant.update();
+    // Pacing time to see it happen
+    await utils.wait(200);
+
+    // In with the new
+    this.battle.activeCombatants[replacement.team] = replacement.id;
+    replacement.update();
+    await utils.wait(200);
+
+    this.battle.playerTeam.update();
+    this.battle.enemyTeam.update();
+
+    resolve();
+  }
+
   submissionMenu(resolve) {
+    const { caster, enemy } = this.event;
     const menu = new SubmissionMenu({
-      caster: this.event.caster,
-      enemy: this.event.enemy,
+      caster,
+      enemy,
       items: this.battle.items,
+      replacements: Object.values(this.battle.combatants).filter((c) => {
+        return c.id !== caster.id && c.team === caster.team && c.hp > 0;
+      }),
       onComplete: (submission) => {
         // submission { what move to use, who to use it on }
         resolve(submission);
       },
     });
 
+    menu.init(this.battle.element);
+  }
+
+  replacementMenu(resolve) {
+    const menu = new ReplacementMenu({
+      replacements: Object.values(this.battle.combatants).filter((c) => {
+        return c.team === this.event.team && c.hp > 0;
+      }),
+      onComplete: (replacement) => {
+        resolve(replacement);
+      },
+    });
     menu.init(this.battle.element);
   }
 
