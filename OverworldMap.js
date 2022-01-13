@@ -3,6 +3,7 @@ class OverworldMap {
     this.overworld = null;
     this.gameObjects = config.gameObjects;
     this.cutsceneSpaces = config.cutsceneSpaces || {};
+    this.isPaused = false;
 
     // Declare our walls
     this.walls = config.walls || {};

@@ -21,6 +21,15 @@ class PlayerState {
         level: 1,
         status: null,
       },
+      p3: {
+        pizzaId: "f001",
+        hp: 50,
+        maxHp: 50,
+        xp: 20,
+        maxXp: 100,
+        level: 1,
+        status: null,
+      },
     };
     this.lineup = ["p1", "p2"];
     this.items = [
@@ -37,6 +46,18 @@ class PlayerState {
         instanceId: "item3",
       },
     ];
+  }
+
+  moveToFront(futureFrontId) {
+    this.lineup = this.lineup.filter((id) => id !== futureFrontId);
+    this.lineup.unshift(futureFrontId);
+    utils.emitEvent("LineupChanged");
+  }
+
+  swapLineup(oldId, incomingId) {
+    const oldIndex = this.lineup.indexOf(oldId);
+    this.lineup[oldIndex] = incomingId;
+    utils.emitEvent("LineupChanged");
   }
 }
 
