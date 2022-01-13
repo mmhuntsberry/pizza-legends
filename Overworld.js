@@ -64,6 +64,9 @@ class Overworld {
   }
 
   init() {
+    this.hud = new Hud();
+    this.hud.init(document.querySelector(".game-container"));
+
     // console.log("Hello from the overworld", this);
     this.startMap(window.OverworldMaps.DemoRoom);
 

@@ -2,62 +2,7 @@ class Battle {
   constructor({ enemy, onComplete }) {
     this.enemy = enemy;
     this.onComplete = onComplete;
-    this.combatants = {
-      //   player1: new Combatant(
-      //     {
-      //       ...Pizzas.s001,
-      //       team: "player",
-      //       hp: 40,
-      //       maxHp: 50,
-      //       xp: 90,
-      //       maxXp: 100,
-      //       level: 1,
-      //       status: null,
-      //       isPlayerControlled: true,
-      //     },
-      //     this
-      //   ),
-      //   player2: new Combatant(
-      //     {
-      //       ...Pizzas.s002,
-      //       team: "player",
-      //       hp: 50,
-      //       maxHp: 50,
-      //       xp: 100,
-      //       maxXp: 100,
-      //       level: 1,
-      //       status: null,
-      //       isPlayerControlled: true,
-      //     },
-      //     this
-      //   ),
-      //   enemy1: new Combatant(
-      //     {
-      //       ...Pizzas.v001,
-      //       team: "enemy",
-      //       hp: 1,
-      //       maxHp: 50,
-      //       xp: 30,
-      //       maxXp: 100,
-      //       level: 1,
-      //       status: null,
-      //     },
-      //     this
-      //   ),
-      //   enemy2: new Combatant(
-      //     {
-      //       ...Pizzas.f001,
-      //       team: "enemy",
-      //       hp: 50,
-      //       maxHp: 50,
-      //       xp: 10,
-      //       maxXp: 100,
-      //       level: 1,
-      //       status: null,
-      //     },
-      //     this
-      //   ),
-    };
+    this.combatants = {};
     this.activeCombatants = {
       player: null,
       enemy: null,
@@ -165,6 +110,9 @@ class Battle {
           playerState.items = playerState.items.filter((item) => {
             return !this.usedInstanceIds[item.instanceId];
           });
+
+          // Send signal to update
+          utils.emitEvent("PlayerStateUpdated");
         }
 
         this.element.remove();
