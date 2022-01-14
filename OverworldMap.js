@@ -61,7 +61,10 @@ class OverworldMap {
         event: events[i],
         map: this,
       });
-      await eventHandler.init();
+      const result = await eventHandler.init();
+      if (result === "LOST_BATTLE") {
+        break;
+      }
     }
 
     this.isCutscenePlaying = false;
@@ -78,9 +81,15 @@ class OverworldMap {
     const match = Object.values(this.gameObjects).find((object) => {
       return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`;
     });
-    console.log({ match });
+
     if (this.isCutscenePlaying === false && match && match.talking.length) {
-      this.startCutscene(match.talking[0].events);
+      const relevantScenario = match.talking.find((scenario) => {
+        console.log(scenario);
+        return (scenario.required || []).every((sf) => {
+          return playerState.storyFlags[sf];
+        });
+      });
+      relevantScenario && this.startCutscene(relevantScenario.events);
     }
   }
 
@@ -125,14 +134,39 @@ window.OverworldMaps = {
         ],
         talking: [
           {
+            required: ["DEFEATED_ERIO"],
             events: [
               {
                 type: "textMessage",
-                text: "Hey!  What are you doing?!?",
+                text: "I am going to crush you.",
                 faceHero: "npc1",
               },
               { type: "battle", enemyId: "beth" },
-              // { type: "textMessage", text: "Get outta here." },
+              { type: "addStoryFlag", flag: "DEFEATED_BETH" },
+              {
+                type: "textMessage",
+                text: "I failed you my love...",
+                faceHero: "npc1",
+              },
+            ],
+          },
+          {
+            required: ["TALKED_TO_ERIO"],
+            events: [
+              {
+                type: "textMessage",
+                text: "Isn't Erio the coolest!?!",
+                faceHero: "npc1",
+              },
+            ],
+          },
+          {
+            events: [
+              {
+                type: "textMessage",
+                text: "Have you met Erio?",
+                faceHero: "npc1",
+              },
             ],
           },
         ],
@@ -143,14 +177,30 @@ window.OverworldMaps = {
         src: "/images/characters/people/erio.png",
         talking: [
           {
+            required: ["DEFEATED_ERIO"],
             events: [
               {
                 type: "textMessage",
-                text: "Bwahahahah!",
+                text: "Have you come to gloat?",
+                faceHero: "npc2",
+              },
+            ],
+          },
+          {
+            events: [
+              {
+                type: "textMessage",
+                text: "Fuck you, kid!",
                 faceHero: "npc2",
               },
               { type: "battle", enemyId: "erio" },
-              // { type: "textMessage", text: "Get outta here." },
+              { type: "addStoryFlag", flag: "TALKED_TO_ERIO" },
+              { type: "addStoryFlag", flag: "DEFEATED_ERIO" },
+              {
+                type: "textMessage",
+                text: "You destroyed me.",
+                faceHero: "npc2",
+              },
             ],
           },
         ],
