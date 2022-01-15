@@ -219,6 +219,12 @@ window.OverworldMaps = {
         y: utils.withGrid(4),
         isPlayerControlled: true,
       }),
+      pizzaStone: new PizzaStone({
+        x: utils.withGrid(1),
+        y: utils.withGrid(7),
+        storyFlag: "USED_PIZZA_STONE",
+        pizzas: ["s002", "f001"],
+      }),
     },
     walls: {
       [utils.asGridCoord(7, 6)]: true,

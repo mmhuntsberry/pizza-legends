@@ -49,7 +49,7 @@ class Sprite {
       ],
     };
 
-    this.currentAnimation = "idle-down"; // config.currentAnimation || "idle-down";
+    this.currentAnimation = config.currentAnimation || "idle-down";
     this.currentAnimationFrame = 0;
 
     this.animationFrameLimit = config.animationFrameLimit || 8;
